@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIT Chennai Lost & Found Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="flex items-center justify-between">
+                <div class="nav-brand">
+                    <h2>🔍 VIT Lost & Found</h2>
+                </div>
+                <div class="nav-links">
+                    <button class="btn btn--outline nav-btn" data-section="home">Home</button>
+                    <button class="btn btn--outline nav-btn" data-section="browse">Browse Items</button>
+                    <button class="btn btn--primary" id="reportItemBtn">Report Item</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Lost Something? Found Something?</h1>
+                <p class="hero-description">Help build a stronger campus community by reporting lost and found items. Together, we can reunite items with their rightful owners.</p>
+                <div class="hero-actions">
+                    <button class="btn btn--primary btn--lg" id="reportLostBtn">Report Lost Item</button>
+                    <button class="btn btn--secondary btn--lg" id="reportFoundBtn">Report Found Item</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Connection Status -->
+    <section class="connection-status" id="connectionStatus">
+        <div class="container">
+            <div class="status-indicator">
+                <span class="status-dot" id="statusDot"></span>
+                <span class="status-text" id="statusText">Connecting to database...</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Dashboard -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalItems">0</div>
+                    <div class="stat-label">Total Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="lostItems">0</div>
+                    <div class="stat-label">Lost Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="foundItems">0</div>
+                    <div class="stat-label">Found Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="recoveredItems">0</div>
+                    <div class="stat-label">Recovered Items</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="homeSection" class="content-section active">
+            <div class="container">
+                <div class="section-header">
+                    <h3>Recent Items</h3>
+                    <button class="btn btn--outline" data-section="browse">View All Items</button>
+                </div>
+                <div class="items-grid" id="recentItemsGrid">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Loading items...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Browse Section -->
+        <section id="browseSection" class="content-section">
+            <div class="container">
+                <div class="browse-header">
+                    <h3>Browse All Items</h3>
+                    <div class="browse-controls">
+                        <div class="search-box">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search items...">
+                        </div>
+                        <select id="categoryFilter" class="form-control">
+                            <option value="">All Categories</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="documents">Documents</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="books">Books</option>
+                            <option value="keys">Keys</option>
+                            <option value="others">Others</option>
+                        </select>
+                        <select id="typeFilter" class="form-control">
+                            <option value="">All Types</option>
+                            <option value="lost">Lost Items</option>
+                            <option value="found">Found Items</option>
+                        </select>
+                        <select id="statusFilter" class="form-control">
+                            <option value="active">Active Only</option>
+                            <option value="resolved">Resolved Only</option>
+                            <option value="">All Status</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="items-grid" id="allItemsGrid">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Loading items...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Report Item Modal -->
+    <div id="reportModal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Report Item</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="reportForm">
+                <input type="hidden" id="itemType" name="type">
+                
+                <div class="form-group">
+                    <label class="form-label" for="itemName">Item Name *</label>
+                    <input type="text" id="itemName" name="itemName" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="category">Category *</label>
+                    <select id="category" name="category" class="form-control" required>
+                        <option value="">Select Category</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="documents">Documents</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="books">Books</option>
+                        <option value="keys">Keys</option>
+                        <option value="others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="description">Description *</label>
+                    <textarea id="description" name="description" class="form-control" rows="4" required placeholder="Please provide detailed description..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="location">Location *</label>
+                    <input type="text" id="location" name="location" class="form-control" required placeholder="Where was the item lost/found?">
+                </div>
+
+                <div class="form-group" id="currentLocationGroup" style="display: none;">
+                    <label class="form-label" for="currentLocation">Current Location</label>
+                    <input type="text" id="currentLocation" name="currentLocation" class="form-control" placeholder="Where is the found item currently kept?">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="urgency">Urgency Level</label>
+                    <select id="urgency" name="urgency" class="form-control">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="reporterName">Your Name *</label>
+                        <input type="text" id="reporterName" name="reporterName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="contactEmail">Email *</label>
+                        <input type="email" id="contactEmail" name="contactEmail" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="contactPhone">Phone Number</label>
+                    <input type="tel" id="contactPhone" name="contactPhone" class="form-control" placeholder="+91 XXXXXXXXXX">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn--outline modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn--primary" id="submitBtn">
+                        <span class="btn-text">Submit Report</span>
+                        <span class="btn-spinner hidden">
+                            <div class="spinner-sm"></div>
+                            Saving...
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Item Details Modal -->
+    <div id="itemDetailsModal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-content--wide">
+            <div class="modal-header">
+                <h3 id="itemDetailsTitle">Item Details</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="item-details-content" id="itemDetailsContent">
+                <!-- Item details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Modal for Resolve/Delete -->
+    <div id="actionModal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-content--small">
+            <div class="modal-header">
+                <h3>Item Actions</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="action-modal-content">
+                <p>What would you like to do with this item?</p>
+                <div class="action-buttons">
+                    <button class="btn btn--primary" id="markResolvedBtn">
+                        <span class="btn-text">✓ Mark as Resolved</span>
+                        <span class="btn-spinner hidden">
+                            <div class="spinner-sm"></div>
+                            Updating...
+                        </span>
+                    </button>
+                    <button class="btn btn--outline" id="deleteItemBtn">
+                        <span class="btn-text">🗑 Delete Permanently</span>
+                        <span class="btn-spinner hidden">
+                            <div class="spinner-sm"></div>
+                            Deleting...
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Firebase v9 SDK -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
